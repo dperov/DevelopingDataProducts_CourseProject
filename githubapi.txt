@@ -1,0 +1,10 @@
+пользователь
+curl https://api.github.com/users/caspyin
+
+
+список форков jtleek/datasharing
+
+GET /repos/:owner/:repo/forks
+
+
+curl -i https://api.github.com/repos/jtleek/datasharing/forks
