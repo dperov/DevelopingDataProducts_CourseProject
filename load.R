@@ -1,19 +1,7 @@
 library(httr)
-library(data.table)
 
 github_auth <- readRDS(".github_auth.rds");
 # github_auth <- authenticate("gtihubuser", "githubpassword") 
-
-
-# R programming
-#https://github.com/rdpeng/ProgrammingAssignment2
-
-# reproducible research
-#https://github.com/rdpeng/RepData_PeerAssessment1
-
-# explanatory data analisys
-#https://github.com/rdpeng/ExData_Plotting1
-# https://api.github.com/repos/rdpeng/ProgrammingAssignment2/forks
 
 load_fork_info <- function(fork_base_url, fork_dir)
 {
@@ -87,27 +75,20 @@ process_fork_info <- function(path, table = data.table())
   table;
 }
 
-# https://api.github.com/repositories/14204342/forks?page=2
-#fork_url <- "https://api.github.com/repositories/14204342/forks"
+url <- "https://api.github.com/repositories/14204342/forks"
+load_fork_info(url, "fork")
+table <- process_fork_info("fork");
+write.table(table, "forkdata.table")
 
-#req <- GET("https://api.github.com/rate_limit", authenticate("dperov", "github00"))
-#content(req)
+url2 <- "https://api.github.com/repos/rdpeng/ProgrammingAssignment2/forks"
+load_fork_info(url2, "fork2")
+table <- process_fork_info("fork2")
+write.table(table, "forkdata_rprogr.table")
 
-#load_fork_info()
-
-#table <- process_fork_info();
-#write.table(table, "forkdata.table")
-
-#url2 <- "https://api.github.com/repos/rdpeng/ProgrammingAssignment2/forks"
-#load_fork_info(url2, "fork2")
-
-#table <- process_fork_info("fork2")
-#write.table(table, "forkdata_rprogr.table")
-
-#url_ex <- "https://api.github.com/repos/rdpeng/ExData_Plotting1/forks"
-#load_fork_info(url_ex, "fork_ex")
-#table <- process_fork_info("fork_ex")
-#write.table(table, "forkdata_ex.table")
+url_ex <- "https://api.github.com/repos/rdpeng/ExData_Plotting1/forks"
+load_fork_info(url_ex, "fork_ex")
+table <- process_fork_info("fork_ex")
+write.table(table, "forkdata_ex.table")
 
 url_repl <- "https://api.github.com/repos/rdpeng/RepData_PeerAssessment1/forks"
 load_fork_info(url_repl, "fork_repl")

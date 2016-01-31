@@ -1,28 +1,47 @@
 Developing Data Products Course Project Presentation
-========================================================
+===
 author: Dmitri Perov  
 date: `r date()`
+# Mining the GitHub
 
-First Slide
-========================================================
+Application Idea
+===
 
-For more details on authoring R presentations click the
-**Help** button on the toolbar.
+- Github.com serves as a data storage for millons of people.
+- Github provides open API that allows to collect data about different Github obects (users, repositories, etc.)
+- I collected data about repository forking and using that calculated a audience for several Coursera courses
+- I developed Shiny application for visualing this data.
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
 
-Slide With Code
-========================================================
+Data Mining
+===
 
-```{r}
-summary(cars)
-```
 
-Slide With Plot
-========================================================
+- Download required data from GitHub
 
-```{r, echo=FALSE}
-plot(cars)
-```
+Data Mining (Contd)
+===
+
+- Using httr pachege to quiry github api
+
+Application
+===
+
+- Show dynamics of students
+
+Summary
+===
+
+- To be done
+
+References
+===
+
+* This presentation
+
+
+* Application Sources om github
+https://github.com/dperov/DevelopingDataProducts_CourseProject
+
+* Application online on shinyapps.io
+https://dperov.shinyapps.io/DevelopingDataProducts_CourseProject/
