@@ -1,47 +1,80 @@
-Developing Data Products Course Project Presentation
+Coursera "Developing Data Products" Course Project Presentation
 ===
 author: Dmitri Perov  
 date: `r date()`
 # Mining the GitHub
 
-Application Idea
+Course Project Summary
 ===
-
-- Github.com serves as a data storage for millons of people.
+- The idea of the application is datamining Github.com via its public API to get some interesting data.
+- It is found that it is possible to estimate the number of the Coursera students that participate Data Science specialization courses every month by quering Github.
+- Some course assignments involve forking particular Github reprository. So, each student participating the course has to fork that reposotory. This can help to retrieve the number of students.
 - Github provides open API that allows to collect data about different Github obects (users, repositories, etc.)
-- I collected data about repository forking and using that calculated a audience for several Coursera courses
+- I collected data about repository forking and using it estimate an audience for several Coursera courses
 - I developed Shiny application for visualing this data.
-
 
 Data Mining
 ===
+- GutHub public API allows to retrieve data about users that have forked the particular repository
 
+- The following chunk of R code illustare Guthub fork API usage
+```
+library(httr)
+# retrieve one page of the result
+url <- "https://api.github.com/repos/rdpeng/ExData_Plotting1/forks?page=2"
+req <- GET(url, authenticate("gtihubuser", "githubpassword"))
+# retrieve list of users and list of fork dates
+content <- content(req)
+# list of users id
+users <- content$owner$id
+# list of reprostory fork time
+created <- content$created_at
+```
+- Actual source code for Guthub mining:
+(https://github.com/dperov/DevelopingDataProducts_CourseProject/blob/master/load.R)
 
-- Download required data from GitHub
-
-Data Mining (Contd)
+Data processing
 ===
+- GitHub fork API returns a lot of information. For our purposes only 2 parameters are used: user Id and forking date.
+- Raw data are merged into single data frame. User counts then are aggregated by month and the course.
+- Final dataset layout:
+```{r echo=FALSE}
+data_agg <- read.table("data/couses_data.table")
+head(data_agg)
+```
+- Actual code for data processing:
+(https://github.com/dperov/DevelopingDataProducts_CourseProject/blob/master/process.R)
 
-- Using httr pachege to quiry github api
-
-Application
+Data processing (contd)
 ===
+- Data processing result:
 
-- Show dynamics of students
+```{r echo=FALSE}
+library(ggplot2)
+library(scales)
+data_agg <- read.table("data/couses_data.table")
+ggplot(data_agg, aes(x= as.Date(month), y= x, colour = course)) + geom_line()  + xlab("Date") + ylab("Number of students")
+```
 
-Summary
+Data Application
 ===
+- Simple Shiny web data application created for data visualization
+(https://dperov.shinyapps.io/DevelopingDataProducts_CourseProject/)
 
-- To be done
 
 References
 ===
+- GitHub public API
+(https://developer.github.com/v3/)
 
-* This presentation
+- Application presentation
+(https://dperov.github.io/DevelopingDataProducts_CourseProject/CourseProjectPresentation.html#/)
 
+- Application presentation on RPubs
+(http://rpubs.com/dperov/DevelopingDataProducts_CourseProject)
 
-* Application Sources om github
-https://github.com/dperov/DevelopingDataProducts_CourseProject
+- Application Sources
+(https://github.com/dperov/DevelopingDataProducts_CourseProject)
 
-* Application online on shinyapps.io
-https://dperov.shinyapps.io/DevelopingDataProducts_CourseProject/
+- Application online on shinyapps.io
+(https://dperov.shinyapps.io/DevelopingDataProducts_CourseProject/)

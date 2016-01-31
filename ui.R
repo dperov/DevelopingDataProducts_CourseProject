@@ -1,19 +1,24 @@
 library(shiny)
 
-courses <- c("The Data Scientist’s Toolbox", 
-             "R Programming", 
-             "Exploratory Data Analysis", 
-             "Reproducible Research") 
-
 shinyUI(pageWithSidebar(
-  titlePanel("Students of Coursera Data Science courses"),  
+  titlePanel("Coursera Data Science Courses data"),  
   sidebarPanel(
-      selectInput("course", "Course:", 
-                  courses),
-      dateInput("From", "From date:"),
-      dateInput("To", "To date:")
+      radioButtons("course", "Course:",
+                   c("All" = "all",
+                     "The Data Scientist’s Toolbox" = "tools",
+                     "R Programming" = "rprogr",
+                     "Exploratory Data Analysis" = "ex",
+                     "Reproducible Research" = "repl"
+                     )),      
+      dateRangeInput("daterange", "Date range:",
+                     start = "2014-01-01",
+                     end   = "2016-01-31",
+                     format = "yyyy-mm-dd"),
+      checkboxInput("checkbox", label = "Smooth plot", value = TRUE)
   ),
   mainPanel(
-    plotOutput("plot") 
+    plotOutput("plot"), 
+    hr(),
+    fluidRow(column(4, verbatimTextOutput("value")))
   )
 ))
