@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Developing Data Products Course Project Presentation</title>
+  <title>Coursera "Developing Data Products" Course Project Presentation</title>
     
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -784,7 +784,7 @@ hljs.initHighlightingOnLoad();
   <div class="slides">
 
 <section data-state="section" data-transition="linear" data-transition-speed="default">
-<h1>Developing Data Products Course Project Presentation</h1><p>Dmitri Perov<br/>Sun Jan 31 13:17:04 2016</p>
+<h1>Coursera &quot;Developing Data Products&quot; Course Project Presentation</h1><p>Dmitri Perov<br/>Sun Jan 31 21:15:23 2016</p>
 
 <div class="slideContent" >
 <h1>Mining the GitHub</h1>
@@ -793,12 +793,14 @@ hljs.initHighlightingOnLoad();
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
-<h3>Application Idea</h3>
+<h3>Course Project Summary</h3>
 <div class="slideContent" >
 <ul>
-<li>Github.com serves as a data storage for millons of people.</li>
+<li>The idea of the application is datamining Github.com via its public API to get some interesting data.</li>
+<li>It is found that it is possible to estimate the number of the Coursera students that participate Data Science specialization courses every month by quering Github.</li>
+<li>Some course assignments involve forking particular Github reprository. So, each student participating the course has to fork that reposotory. This can help to retrieve the number of students.</li>
 <li>Github provides open API that allows to collect data about different Github obects (users, repositories, etc.)</li>
-<li>I collected data about repository forking and using that calculated a audience for several Coursera courses</li>
+<li>I collected data about repository forking and using it estimate an audience for several Coursera courses</li>
 <li>I developed Shiny application for visualing this data.</li>
 </ul>
 
@@ -809,37 +811,71 @@ hljs.initHighlightingOnLoad();
 <h3>Data Mining</h3>
 <div class="slideContent" >
 <ul>
-<li>Download required data from GitHub</li>
+<li><p>GutHub public API allows to retrieve data about users that have forked the particular repository</p></li>
+<li><p>The following chunk of R code illustare Guthub fork API usage</p>
+
+<pre><code>library(httr)
+# retrieve one page of the result
+url &lt;- &quot;https://api.github.com/repos/rdpeng/ExData_Plotting1/forks?page=2&quot;
+req &lt;- GET(url, authenticate(&quot;gtihubuser&quot;, &quot;githubpassword&quot;))
+# retrieve list of users and list of fork dates
+content &lt;- content(req)
+# list of users id
+users &lt;- content$owner$id
+# list of reprostory fork time
+created &lt;- content$created_at
+</code></pre></li>
+<li><p>Actual source code for Guthub mining:
+(<a href="https://github.com/dperov/DevelopingDataProducts_CourseProject/blob/master/load.R">https://github.com/dperov/DevelopingDataProducts_CourseProject/blob/master/load.R</a>)</p></li>
 </ul>
 
 </div>
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
-<h3>Data Mining (Contd)</h3>
+<h3>Data processing</h3>
 <div class="slideContent" >
 <ul>
-<li>Using httr pachege to quiry github api</li>
+<li>GitHub fork API returns a lot of information. For our purposes only 2 parameters are used: user Id and forking date.</li>
+<li>Raw data are merged into single data frame. User counts then are aggregated by month and the course.</li>
+<li>Final dataset layout:</li>
+</ul>
+
+<pre><code>       month course    x
+1 2014-02-01     ex    2
+2 2014-05-01     ex 3043
+3 2014-06-01     ex 1744
+4 2014-07-01     ex 1994
+5 2014-08-01     ex 1642
+6 2014-09-01     ex 1616
+</code></pre>
+
+<ul>
+<li>Actual code for data processing:
+(<a href="https://github.com/dperov/DevelopingDataProducts_CourseProject/blob/master/process.R">https://github.com/dperov/DevelopingDataProducts_CourseProject/blob/master/process.R</a>)</li>
 </ul>
 
 </div>
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
-<h3>Application</h3>
-<div class="slideContent" >
+<h3>Data processing (contd)</h3>
+<div class="mediaInline slideContent" >
 <ul>
-<li>Show dynamics of students</li>
+<li>Data processing result:</li>
 </ul>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-2"/></p>
 
 </div>
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
-<h3>Summary</h3>
+<h3>Data Application</h3>
 <div class="slideContent" >
 <ul>
-<li>To be done</li>
+<li>Simple Shiny web data application created for data visualization
+(<a href="https://dperov.shinyapps.io/DevelopingDataProducts_CourseProject/">https://dperov.shinyapps.io/DevelopingDataProducts_CourseProject/</a>)</li>
 </ul>
 
 </div>
@@ -849,11 +885,16 @@ hljs.initHighlightingOnLoad();
 <h3>References</h3>
 <div class="slideContent" >
 <ul>
-<li><p>This presentation</p></li>
-<li><p>Application Sources om github
-<a href="https://github.com/dperov/DevelopingDataProducts_CourseProject">https://github.com/dperov/DevelopingDataProducts_CourseProject</a></p></li>
+<li><p>GitHub public API
+(<a href="https://developer.github.com/v3/">https://developer.github.com/v3/</a>)</p></li>
+<li><p>Application presentation
+(<a href="https://dperov.github.io/DevelopingDataProducts_CourseProject/CourseProjectPresentation.html#/">https://dperov.github.io/DevelopingDataProducts_CourseProject/CourseProjectPresentation.html#/</a>)</p></li>
+<li><p>Application presentation on RPubs
+(<a href="http://rpubs.com/dperov/DevelopingDataProducts_CourseProject">http://rpubs.com/dperov/DevelopingDataProducts_CourseProject</a>)</p></li>
+<li><p>Application Sources
+(<a href="https://github.com/dperov/DevelopingDataProducts_CourseProject">https://github.com/dperov/DevelopingDataProducts_CourseProject</a>)</p></li>
 <li><p>Application online on shinyapps.io
-<a href="https://dperov.shinyapps.io/DevelopingDataProducts_CourseProject/">https://dperov.shinyapps.io/DevelopingDataProducts_CourseProject/</a></p></li>
+(<a href="https://dperov.shinyapps.io/DevelopingDataProducts_CourseProject/">https://dperov.shinyapps.io/DevelopingDataProducts_CourseProject/</a>)</p></li>
 </ul>
 
 </div>

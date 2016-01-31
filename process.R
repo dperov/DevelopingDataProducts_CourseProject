@@ -29,3 +29,7 @@ data_agg <- aggregate(x = data$count, by = list(month = aggregate_by_month(data$
 #ggplot(data_agg, aes(x= as.Date(month), y= x, colour = course)) + geom_line()  + xlab("Date") + ylab("Number of students")
   
 write.table(data_agg, file = "couses_data.table")
+
+#datebeg <- as.POSIXlt(as.character("2014-01-02"))
+#dateend <- as.POSIXlt(as.character("2015-01-01"))
+#subset <- data_agg[as.POSIXlt(data_agg$month) >=  datebeg & as.POSIXlt(data_agg$month) <= dateend & data_agg$course == "ex" ,]
